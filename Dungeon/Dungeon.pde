@@ -39,15 +39,15 @@ void keyPressed(){
       magnif ++;
     }
   }else if (key==97){
-     for(int i=0;i<currLevel.rooms.size();i++){
-       room = currLevel.rooms.get(i);
-       float xpos = map(room.xpos,0,currLevel.levelX/magnif,0,width);
-       float ypos = map(room.ypos,0,currLevel.levelY/magnif,0,height);
-       float xdim = map(room.xdim,0,currLevel.levelX/magnif,0,width);
-       float ydim = map(room.ydim,0,currLevel.levelX/magnif,0,height);
-       println( "xpos", room.xpos, xpos, "ypos", room.ypos, ypos);
-       println( "xdim", room.xdim, xdim, "ydim", room.ydim, ydim);
-     }
+//     for(int i=0;i<currLevel.rooms.size();i++){
+//       room = currLevel.rooms.get(i);
+//       float xpos = map(room.xpos,0,currLevel.levelX/magnif,0,width);
+//       float ypos = map(room.ypos,0,currLevel.levelY/magnif,0,height);
+//       float xdim = map(room.xdim,0,currLevel.levelX/magnif,0,width);
+//       float ydim = map(room.ydim,0,currLevel.levelX/magnif,0,height);
+//       println( "xpos", room.xpos, xpos, "ypos", room.ypos, ypos);
+//       println( "xdim", room.xdim, xdim, "ydim", room.ydim, ydim);
+//     }
    }
  } 
 

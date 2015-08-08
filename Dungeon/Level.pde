@@ -25,13 +25,13 @@ class Level {
        this.addRoom(candidate);
      }
    }  
-   for(int i=0;i<levelX/feetPerSq;i++){
-     string curRow;
-     for(int j=0;j<levelY/feetPerSq;j++){
-       curRow = curRow + map[i][j];
-     }
-   }  
-  }  
+//   for(int i=0;i<levelX/feetPerSq;i++){
+//     string curRow;
+//     for(int j=0;j<levelY/feetPerSq;j++){
+//       curRow = curRow + map[i][j];
+//     }
+//   }  
+ }  
   boolean checkNewRoom(Room room){
    if ((room.xpos + room.xdim) > levelX){
      return false;
@@ -49,7 +49,7 @@ class Level {
   }
   void addRoom(Room room){
     rooms.add( room );
-    println(room.xpos/feetPerSq, room.xdim/feetPerSq+room.xpos/feetPerSq, levelX/feetPerSq);
+//    println(room.xpos/feetPerSq, room.xdim/feetPerSq+room.xpos/feetPerSq, levelX/feetPerSq);
     for (int i=room.xpos/feetPerSq; i < (room.xdim/feetPerSq + room.xpos/feetPerSq); i++){
       for (int j = room.ypos/feetPerSq; j < (room.ydim/feetPerSq + room.ypos/feetPerSq); j++){
         map[i][j] = 'r';
