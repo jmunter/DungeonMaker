@@ -1,108 +1,96 @@
 class Level {
-  int levelX = 250,
+  int levelX = 250,  //Level Dimensions
       levelY = 250;
-  int maxX = 80;
+  int maxX = 80;     //Max Room Dimensions
   int maxY = 80;
-  int maxRooms = 20;
+  int maxRooms = 20;  //Max Number of Rooms
   ArrayList<Room> rooms = new ArrayList<Room>();
   Room candidate;
-  char[][] map;
+  char[][] map;  // Map of the level
   
   Level(int feetPerSq){   
-   // assign 'o' (open) to all squares in level
-   map = new char[levelX/feetPerSq][levelY/feetPerSq];
-   for(int i=0;i<(levelX/feetPerSq);i++){
-     for(int j=0;j<(levelY/feetPerSq);j++){
-       map[i][j] = 'o';
+     int levelXSq = levelX/feetPerSq;
+     int levelYSq = levelY/feetPerSq;
+     map = new char[levelXSq][levelYSq]; // init whole level to  'o' (open)
+     for(int i=0; i < (levelXSq); i++){
+       for(int j=0; j < (levelYSq); j++){
+         map[i][j] = 'o';
+       }
      }
-   }
-   //for maxRooms tries, create a room
-   for(int i=0;i<maxRooms;i++){
-     candidate = new Room(levelX,levelY,maxX, maxY, feetPerSq);
-     //if it overlaps with an existing room, reject it.
-     boolean keep = this.checkNewRoom(candidate); 
-     if (keep==true){
-       this.addRoom(candidate);
-     }
-   }  
-//   for(int i=0;i<levelX/feetPerSq;i++){
-//     string curRow;
-//     for(int j=0;j<levelY/feetPerSq;j++){
-//       curRow = curRow + map[i][j];
-//     }
-//   }  
+     //for maxRooms tries, create a room
+     for(int i=0; i < maxRooms; i++){
+       candidate = new Room(levelX,levelY,maxX, maxY, feetPerSq);
+       //if it overlaps with an existing room, reject it.
+       boolean keep = this.checkNewRoom(candidate); 
+       if (keep==true){
+         this.addRoom(candidate);
+       }
+     }  
  }  
+ 
   boolean checkNewRoom(Room room){
-   if ((room.xpos + room.xdim) > levelX){
-     return false;
-   } else if ((room.ypos + room.ydim) > levelY){
-     return false;
-   }
-    for (int i=room.xpos/feetPerSq; i < (room.xdim/feetPerSq + room.xpos/feetPerSq); i++){
-      for (int j = room.ypos/feetPerSq; j < (room.ydim/feetPerSq + room.ypos/feetPerSq); j++){
-        if (map[i][j] != 'o'){
-          return false;
+     int xposSq  = room.xpos/feetPerSq;
+     int yposSq  = room.ypos/feetPerSq;
+     int xposDim = room.xdim/feetPerSq;
+     int yposDim = room.ydim/feetPerSq;
+     // If room goes past the edge of the level, throw it out
+     if ((room.xpos + room.xdim) >= levelX){
+       return false;
+     }
+     if ((room.ypos + room.ydim) >= levelY){
+       return false;
+     }
+     if (room.xpos == 0){
+       return false;
+     }
+     if (room.ypos == 0){
+       return false;
+     }
+     // If room overlaps another room, throw it out
+     for (int i=xposSq; i < (xposSq + xposDim); i++){
+       for (int j = yposSq; j < (yposSq +yposDim); j++){
+         if (map[i][j] != 'o'){
+           return false;
+         }
+       }
+     }
+     return true;  //all tests passed
+  }
+  
+  void addRoom(Room room){
+      int xposSq  = room.xpos/feetPerSq;
+      int yposSq  = room.ypos/feetPerSq;
+      int xposDim = room.xdim/feetPerSq;
+      int yposDim = room.ydim/feetPerSq; 
+      
+      rooms.add( room );
+      for (int i=xposSq; i < (xposDim + xposSq); i++){
+        for (int j = yposSq; j < (yposDim + yposSq); j++){
+          map[i][j] = 'r';
         }
       }
-    }
-    return true;
+      addWalls(room); 
   }
-  void addRoom(Room room){
-    rooms.add( room );
-//    println(room.xpos/feetPerSq, room.xdim/feetPerSq+room.xpos/feetPerSq, levelX/feetPerSq);
-    for (int i=room.xpos/feetPerSq; i < (room.xdim/feetPerSq + room.xpos/feetPerSq); i++){
-      for (int j = room.ypos/feetPerSq; j < (room.ydim/feetPerSq + room.ypos/feetPerSq); j++){
-        map[i][j] = 'r';
-      }
-    }
-    addWalls(room); 
-  }
+  
   void addWalls(Room room){
-    int n = room.ypos/feetPerSq - feetPerSq;
-    int e = room.xpos/feetPerSq - feetPerSq;
-    int s = room.ypos/feetPerSq + room.ydim/feetPerSq + feetPerSq;
-    int w = room.ypos/feetPerSq + room.xdim/feetPerSq + feetPerSq;
-    // North wall
-    if( n > 0 || n == 0){
-      for (int i=room.xpos/feetPerSq;i<room.xdim/feetPerSq+room.xpos/feetPerSq;i++){ 
-        map[i][n]='w';
+      int xposSq  = room.xpos/feetPerSq;
+      int yposSq  = room.ypos/feetPerSq;
+      int xposDim = room.xdim/feetPerSq;
+      int yposDim = room.ydim/feetPerSq;
+      int north = yposSq - 1;
+      int south = yposSq + yposDim;      
+      int west = xposSq - 1;
+      int east = xposSq + xposDim;
+
+      // North wall and South Walls
+      for (int i = west; i <= east; i++){  
+        map[i][north]='w';        
+        map[i][south]='w';
       }
-      // NE corner
-      if (e>0||e==0){
-        map[e][n] = 'w';
+      // East & West Walls
+      for (int i = north; i<= south; i++){
+        map[west][i]='w';
+        map[east][i]='w'; 
       }
-      // NW corner
-      if (w<levelX/feetPerSq || w == levelX/feetPerSq){
-        map[w][n] = 'w';
-      }
-    }
-    //East Wall
-    if (e>0||e==0){
-      for (int i=room.ypos/feetPerSq;i<room.ydim/feetPerSq+room.ypos/feetPerSq;i++){
-        map[e][i] = 'w';
-      }
-    }
-    //South Wall
-    if (s<levelY/feetPerSq||s==levelY/feetPerSq){
-      for (int i=room.xpos/feetPerSq;i<room.xdim/feetPerSq+room.xpos/feetPerSq;i++){
-        map[i][s] = 'w';
-      }
-      //SE corner
-      if (e>0||e==0){
-        map[e][s] = 'w';
-      }
-      // SW corner
-      if (w<levelX/feetPerSq || w == levelX/feetPerSq){
-        map[w][s] = 'w';
-      }
-    }
-    //West Wall
-    if (w<levelX/feetPerSq||w == levelX/feetPerSq){
-      for (int i=room.ypos/feetPerSq;i<room.ydim/feetPerSq+room.ypos/feetPerSq;i++){
-        map[w][i] = 'w';
-      }
-    }
- 
- 
   }  
 }

@@ -38,7 +38,17 @@ void keyPressed(){
     } else if (keyCode == DOWN && magnif < 6) {
       magnif ++;
     }
-  }else if (key==97){
+  }else if (key==97){ // if it's "a"
+       char data[];
+       data = new char [currLevel.levelX/feetPerSq];
+       for(int i=0; i < (currLevel.levelY/feetPerSq); i++){
+         for(int j=0; j < (currLevel.levelX/feetPerSq); j++){
+         data[j] = currLevel.map[j][i];
+         }
+         String row = new String(data);
+         println(row);
+       }
+         
 //     for(int i=0;i<currLevel.rooms.size();i++){
 //       room = currLevel.rooms.get(i);
 //       float xpos = map(room.xpos,0,currLevel.levelX/magnif,0,width);
